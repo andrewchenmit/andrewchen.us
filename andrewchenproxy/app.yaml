@@ -1,0 +1,22 @@
+application: andrewchenproxy
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: no
+
+builtins:
+- admin_redirect: on
+
+libraries:
+- name: django
+  version: "1.2"
+
+handlers:
+
+- url: /www
+  static_dir: www
+  
+- url: /.*
+  script: app.py
+
+

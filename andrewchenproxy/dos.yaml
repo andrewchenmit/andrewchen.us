@@ -1,0 +1,7 @@
+blacklist:
+- subnet: 93.159.230.0/24
+  description: keeps visiting forum.php
+- subnet: 208.80.194.0/24
+  description: keeps visiting k.php
+- subnet: 108.60.96.194
+  description: keeps visiting /games/java_trust.php

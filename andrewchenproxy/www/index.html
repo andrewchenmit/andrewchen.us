@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" ng-app="example">
+<head>
+  <meta charset="utf-8">
+  <title>Andrew Chen | Under Construction</title>
+  <link rel="stylesheet" href="/www/css/app.css">
+  <link rel="stylesheet" href="/www/css/bootstrap.min.css">
+  <script src="/www/lib/angular.min.js"></script>
+  <script src="/www/js/app.js"></script>
+  <script src="/www/js/controllers.js"></script>
+</head>
+<body>
+ <div class="navbar navbar-inverse">
+	<a class="navbar-brand" href="/">
+		<span>AngularJS Kit</span>
+	</a>
+	<div class="nav-collapse collapse navbar-responsive-collapse">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="#/example">Example App</a>
+			</li>
+		</ul>
+	</div>
+	<div class="loader pull-right" data-bind="css: { active: router.isNavigating }">
+		<i class="icon-spinner icon-2x icon-spin"></i>
+	</div>
+</div>
+  <div ng-view></div>
+ 
+</body>
+</html>
