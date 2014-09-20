@@ -10,6 +10,10 @@ html, body {
 }
 */
 
+.partial-container {
+  margin-top: 50px;
+}
+
 .wedding-navbar {
   opacity: 0.85;
   margin-bottom: 0px;
@@ -29,13 +33,26 @@ html, body {
     background-size: cover;
     -moz-background-size: cover;
 }
-/*
 .carousel .three {
-    background: url(assets/img/slide1blur.jpg);
+    background: url("/www/wedding/images/jennyhome.jpg");
     background-size: cover;
     -moz-background-size: cover;
 }
-*/
+.carousel .four {
+    background: url("/www/wedding/images/bigsurkiss.png");
+    background-size: cover;
+    -moz-background-size: cover;
+}
+.carousel .five {
+    background: url("/www/wedding/images/northbeach.jpg");
+    background-size: cover;
+    -moz-background-size: cover;
+}
+.carousel .six {
+    background: url("/www/wedding/images/pfeifferbeach.png");
+    background-size: cover;
+    -moz-background-size: cover;
+}
 
 /*
 .carousel .active {
