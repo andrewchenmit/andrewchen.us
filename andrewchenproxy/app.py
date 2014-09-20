@@ -11,11 +11,13 @@ router.addRoute('/test', 'controllers.test')
 # The BootController
 # This is the default controller, routed to handle all paths -> /(.*)
 class BootController:
-	def GET(self, path=""):
-		# Call render.path to render HTML Files in /www/default/html that match the path
-		return render.page('/www/index.html')
+  def GET(self, path=""):
+    # Call render.path to render HTML Files in /www/default/html that match the path
+    if path == 'andrewjennywedding':
+      return render.page('/www/wedding/index.html')
+    return render.page('/www/index.html')
 
 # Run the application
 if __name__ == '__main__':
-	app = web.application(router.getRoutes(), globals())
-	app.cgirun()
+  app = web.application(router.getRoutes(), globals())
+  app.cgirun()

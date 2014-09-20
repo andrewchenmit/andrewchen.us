@@ -6,5 +6,5 @@ class test:
 			'firstName': 'Any',
 			'lastName': 'Developer'
 		}
-		
+
 		return utility.json_dump(data)
