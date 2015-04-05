@@ -15,6 +15,8 @@ class BootController:
     # Call render.path to render HTML Files in /www/default/html that match the path
     if path == 'andrewjennywedding':
       return render.page('/www/wedding/index.html')
+    if path == 'travelroos':
+      return render.page('/www/travelroos/index.html')
     return render.page('/www/index.html')
 
 # Run the application
