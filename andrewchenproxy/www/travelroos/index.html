@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="example">
+<html lang="en" ng-app="phonecatApp">
 <head>
   <meta charset="utf-8">
   <title>Travelroos</title>
@@ -12,10 +12,23 @@
   <script src="/www/js/jquery-2.1.1.min.js"></script>
   <script src="/www/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body ng-controller="PhoneListCtrl">
 
-<div class="partial-container" ng-view></div>
- 
+<!--div class="partial-container" ng-view></div-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-10">
+      <!--Body content-->
+      <ul class="phones">
+        <li ng-repeat="phone in phones">
+          {{phone.name}}
+          <p>{{phone.snippet}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
 </script>
 </body>
