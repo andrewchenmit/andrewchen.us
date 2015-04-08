@@ -2,6 +2,7 @@ import itertools
 import json
 import MySQLdb
 import os
+import unicodedata
 from bootsmooth import utility, render
 
 class weekendfaresdb:
@@ -37,14 +38,34 @@ class weekendfaresdb:
       print e
 
     rows = cursor.fetchall()
-    #print rows
     columns = [t[0] for t in cursor.description]
     result = []
 
     for row in rows:
-      row = dict(zip(columns, row))
+      newrow = []
+      for item in row:
+        #print item
+        try:
+          item = unicodedata.normalize('NFKD', item)
+          #print item
+        except:
+          pass
+        try:
+          item = item.decode('utf-8','ignore')
+          #print item
+        except:
+          pass
+        try:
+          item = unicodedata.normalize('NFKD', item)
+          #print item
+        except:
+          pass
+        #print item
+        newrow.append(item)
+      row = dict(zip(columns, newrow))
       result.append(row)
 
     result = eval(str(result))
+
     return utility.json_dump(result)
     #return render.page('/www/travelroos/index.html')
