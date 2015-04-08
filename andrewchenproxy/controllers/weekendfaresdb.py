@@ -11,7 +11,21 @@ class weekendfaresdb:
     # Define your production Cloud SQL instance information.
     _INSTANCE_NAME = 'weekendairfare:fares'
 
-    db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
+    env = os.getenv('SERVER_SOFTWARE')
+    if (env and env.startswith('Google App Engine/')):
+      # Connecting from App Engine
+      db = MySQLdb.connect(
+             unix_socket='/cloudsql/weekendairfare:fares',
+             user='root', passwd='roos', db='weekendfares')
+    else:
+      # Connecting from an external network.
+      # Make sure your network is whitelisted
+      db = MySQLdb.connect(
+             '173.194.80.20',
+             'root',
+             "roos",
+             "weekendfares")
+    #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
     cursor=db.cursor()
 
     select_sql="""SELECT * FROM fares"""
