@@ -19,14 +19,17 @@ phonecatApp.controller('PhoneListCtrl', function ($scope, $http) {
   function format_data(d) {
     result = {};
     for (var i=0;i<d.length;i++) {
-      if (!(d[i].destination_airport in result)) {
-        result[d[i].destination_airport] = {};
+      var candidate = 'SFO to ' + d[i].destination_airport;
+      if (!(candidate in result)) {
+        result[candidate] = {};
       }
-      if (!(d[i].there_date in result[d[i].destination_airport])) {
-        result[d[i].destination_airport][d[i].there_date] = {};
+      var candidate2 = d[i].there_date + " to " + d[i].back_date;
+      if (!(candidate2 in result[candidate])) {
+        result[candidate][candidate2] = {};
       }
-      if (!(d[i].check_date in result[d[i].destination_airport][d[i].there_date])) {
-        result[d[i].destination_airport][d[i].there_date][d[i].check_date] = d[i];
+      var candidate3 = d[i].check_date;
+      if (!(candidate3 in result[candidate][candidate2])) {
+        result[candidate][candidate2][candidate3] = d[i];
       }
     }
     return result;
@@ -35,7 +38,7 @@ phonecatApp.controller('PhoneListCtrl', function ($scope, $http) {
   $http.get("weekendfaresdb")
     .success(function(data){
       //$scope.phones = format_data(data);
-      $scope.phones = data;
+      $scope.phones = format_data(data);
       console.log("SUCCESS");
       console.log(format_data(data));
     })

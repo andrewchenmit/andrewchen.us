@@ -19,22 +19,27 @@
   <div class="row">
     <div class="col-md-10">
       <!--Body content-->
-  <input type="search" ng-model="q" placeholder="filter weekends... e.g. 2015-04-10" style="width: 400px;"/>
+
+  <!--input type="search" ng-model="q" placeholder="filter weekends... e.g. 2015-04-10" style="width: 400px;"/>
   <ul class="example-animate-container">
     <li class="animate-repeat" ng-repeat="flight in phones | filter:q">
     SFO to {{flight.destination_airport}}: {{flight.there_date}} {{flight.there_times}} | {{flight.back_date}} {{flight.back_times}} for {{flight.price}}
     <a href="{{flight.book_url}}" target="_blank">Book</a>
     </li>
-  </ul>
-      <!--ul class="phones">
-        <li ng-repeat="(key, dest) in phones">
-          {{key}}
-          <li ng-repeat="(key2, weekend) in dest">
-            "SDFS"
-            {{key2}}
-          </li>
-        </li>
-      </ul-->
+  </ul-->
+      <div class="phones">
+        <div ng-repeat="(dest, weekends) in phones">
+          {{dest}}
+          <div ng-repeat="(weekend, checkdates) in weekends">
+            {{weekend}}
+            <div ng-repeat="(checkdate, info) in checkdates">
+              {{checkdate}}
+              <div>{{info.back_operator}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
