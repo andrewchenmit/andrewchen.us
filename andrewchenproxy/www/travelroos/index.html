@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="phonecatApp">
+<html lang="en" ng-app="weekendfaresApp">
 <head>
   <meta charset="utf-8">
   <title>Weekend Fares</title>
@@ -9,10 +9,13 @@
   <script src="/www/lib/angular.min.js"></script>
   <script src="/www/travelroos/js/app.js"></script>
   <script src="/www/travelroos/js/controllers.js"></script>
+  <script src="/www/travelroos/js/filters.js"></script>
   <script src="/www/js/jquery-2.1.1.min.js"></script>
   <script src="/www/js/bootstrap.min.js"></script>
 </head>
-<body ng-controller="PhoneListCtrl">
+<body ng-controller="FaresCtrl">
+
+<br/>
 
 <!--div class="partial-container" ng-view></div-->
 <div class="container-fluid">
@@ -20,26 +23,46 @@
     <div class="col-md-10">
       <!--Body content-->
 
-  <!--input type="search" ng-model="q" placeholder="filter weekends... e.g. 2015-04-10" style="width: 400px;"/>
-  <ul class="example-animate-container">
-    <li class="animate-repeat" ng-repeat="flight in phones | filter:q">
-    SFO to {{flight.destination_airport}}: {{flight.there_date}} {{flight.there_times}} | {{flight.back_date}} {{flight.back_times}} for {{flight.price}}
-    <a href="{{flight.book_url}}" target="_blank">Book</a>
-    </li>
-  </ul-->
-      <div class="phones">
-        <div ng-repeat="(dest, weekends) in phones">
-          {{dest}}
-          <div ng-repeat="(weekend, checkdates) in weekends">
-            {{weekend}}
-            <div ng-repeat="(checkdate, info) in checkdates">
-              {{checkdate}}
-              <div>{{info.back_operator}}</div>
+      <div ng-repeat="(dest, weekends) in fares" class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{dest}}</h3>
+        </div>
+        <div class="panel-body">
+          <div class="panel-group" id="accordion{{dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
+            <div ng-repeat="(weekend, checkdates) in weekends" class="panel panel-info">
+              <!-- Accordion heading start -->
+              <div class="panel-heading" role="tab" id="heading{{dest|removeSpaces}}{{weekend|removeSpaces}}">
+                <h5 class="panel-title">
+                  <span>{{weekend}}:</span>
+                  <a href="{{checkdates.latest_book_url}}" target="_blank" role="button" class="btn btn-default">{{checkdates.latest_price}}</a>
+                  <a data-toggle="collapse" data-parent="#accordion{{dest|removeSpaces}}" href="#collapse{{dest|removeSpaces}}{{weekend|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{dest|removeSpaces}}{{weekend|removeSpaces}}" role="button" class="">
+                    Price history
+                  </a>
+                </h5>
+              </div>
+              <!-- Accordion heading end -->
+              <!-- Accordion body start-->
+              <div id="collapse{{dest|removeSpaces}}{{weekend|removeSpaces}}" class="panel-collapse collapse" role="tabpanel" aria-lablledby="heading{{dest|removeSpaces}}{{weekend|removeSpaces}}">
+                <div class="panel-body">
+                  <table class="table table-condensed">
+                    <thead>
+                      <tr>
+                        <th ng-repeat="date in dates">{{date}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td ng-repeat="date in dates">{{checkdates[date].price}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- Accordion body end -->
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
