@@ -5,9 +5,8 @@ from bootsmooth import router, render
 
 # Add Custom Routes to Controllers
 # import controllers
-#router.addRoute('/contact', 'controllers.contact')
 router.addRoute('/weekendfaresdb', 'controllers.weekendfaresdb')
-#router.addRoute('/andrewjennywedding', 'controllers.test')
+router.addRoute('/pricesdb', 'controllers.pricesdb')
 
 # The BootController
 # This is the default controller, routed to handle all paths -> /(.*)
