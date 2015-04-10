@@ -38,7 +38,12 @@
                         {{::weekend}}:
                       </div>
                       <div class="col-xs-2">
-                        <a href="{{::checkdates.latest_book_url}}" target="_blank" role="button" class="" {{::isNotPrice(checkdates.latest_price) && 'disabled' || ''}}>{{::checkdates.latest_price}}</a>
+                        <div ng-show="!isNotPrice(checkdates.latest_price)">
+                          <a href="{{::checkdates.latest_book_url}}" target="_blank" role="button" class="">{{::checkdates.latest_price}}</a>
+                        </div>
+                        <div ng-show="isNotPrice(checkdates.latest_price)">
+                          <span>{{::checkdates.latest_price}}</span>
+                        </div>
                       </div>
                       <div class="col-xs-4">
                         <a data-toggle="collapse" data-parent="#accordion{{::dest|removeSpaces}}" href="#collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" role="button" class="">details + price history</a>
