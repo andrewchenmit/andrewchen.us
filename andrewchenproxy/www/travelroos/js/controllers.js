@@ -37,6 +37,15 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     }
     return false;
   }
+  $scope.getDests = function(dests) {
+    var result = [];
+    angular.forEach(dests, function(value, key) {
+      result.push(key);
+    });
+    console.log("SDLFJSDF");
+    console.log(result);
+    return result;
+  }
   $scope.filterLatestPrice = function(items) {
       var result = {};
       angular.forEach(items, function(value, key) {
