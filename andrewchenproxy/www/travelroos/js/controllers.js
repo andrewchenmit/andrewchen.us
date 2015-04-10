@@ -31,6 +31,12 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     date_array.sort().reverse();
     return date_array;
   }
+  $scope.isNotPrice = function(price) {
+    if (price.indexOf('$') == -1) {
+      return true;
+    }
+    return false;
+  }
   $scope.filterLatestPrice = function(items) {
       var result = {};
       angular.forEach(items, function(value, key) {

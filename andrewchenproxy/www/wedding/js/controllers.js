@@ -1,6 +1,5 @@
 function ExamplesCtrl($scope, $http) {
 	$http.get('/test').success(function(person){
-		console.log(person);
 		
 		$scope.messages = [
 			{content: 'Hello'},

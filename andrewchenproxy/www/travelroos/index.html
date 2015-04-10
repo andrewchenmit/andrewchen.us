@@ -7,11 +7,11 @@
   <link rel="stylesheet" href="/www/travelroos/css/app.css">
   <link rel="shortcut icon" href="/www/travelroos/images/couple.ico">
   <script src="/www/lib/angular.min.js"></script>
+  <script src="/www/lib/jquery-2.1.1.min.js"></script>
+  <script src="/www/lib/bootstrap.min.js"></script>
   <script src="/www/travelroos/js/app.js"></script>
   <script src="/www/travelroos/js/controllers.js"></script>
   <script src="/www/travelroos/js/filters.js"></script>
-  <script src="/www/js/jquery-2.1.1.min.js"></script>
-  <script src="/www/js/bootstrap.min.js"></script>
 </head>
 <body ng-controller="FaresCtrl">
 
@@ -20,50 +20,101 @@
 <!--div class="partial-container" ng-view></div-->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-10">
-      <!--Body content-->
-
-      <div ng-repeat="(dest, weekends) in fares" class="panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title">{{dest}}</h3>
-        </div>
-        <div class="panel-body">
-          <div class="panel-group" id="accordion{{dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
-            <div ng-repeat="(weekend, checkdates) in weekends" class="panel panel-info">
-              <!-- Accordion heading start -->
-              <div class="panel-heading" role="tab" id="heading{{dest|removeSpaces}}{{weekend|removeSpaces}}">
-                <h5 class="panel-title">
-                  <span>{{weekend}}:</span>
-                  <a href="{{checkdates.latest_book_url}}" target="_blank" role="button" class="btn btn-default">{{checkdates.latest_price}}</a>
-                  <a data-toggle="collapse" data-parent="#accordion{{dest|removeSpaces}}" href="#collapse{{dest|removeSpaces}}{{weekend|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{dest|removeSpaces}}{{weekend|removeSpaces}}" role="button" class="">
-                    Price history
-                  </a>
-                </h5>
-              </div>
-              <!-- Accordion heading end -->
-              <!-- Accordion body start-->
-              <div id="collapse{{dest|removeSpaces}}{{weekend|removeSpaces}}" class="panel-collapse collapse" role="tabpanel" aria-lablledby="heading{{dest|removeSpaces}}{{weekend|removeSpaces}}">
-                <div class="panel-body">
-                  <table class="table table-condensed">
-                    <thead>
-                      <tr>
-                        <th ng-repeat="date in dates">{{date}}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td ng-repeat="date in dates">{{checkdates[date].price}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+    <!--Body content-->
+    <div ng-repeat="(dest, weekends) in ::fares" >
+      <div class="col-lg-7">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{::dest}}</h3>
+          </div>
+          <div class="panel-body">
+            <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
+              <div ng-repeat="(weekend, checkdates) in ::weekends" class="panel panel-default">
+                <!-- Accordion heading start -->
+                <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend|removeSpaces}}">
+                  <div class="panel-title">
+                    <div class="row">
+                      <div class="col-xs-6">
+                        {{::weekend}}:
+                      </div>
+                      <div class="col-xs-2">
+                        <a href="{{::checkdates.latest_book_url}}" target="_blank" role="button" class="" {{::isNotPrice(checkdates.latest_price) && 'disabled' || ''}}>{{::checkdates.latest_price}}</a>
+                      </div>
+                      <div class="col-xs-4">
+                        <a data-toggle="collapse" data-parent="#accordion{{::dest|removeSpaces}}" href="#collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" role="button" class="">details + price history</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <!-- Accordion heading end -->
+                <!-- Accordion body start-->
+                <div id="collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" class="panel-collapse collapse" role="tabpanel" aria-lablledby="heading{{::dest|removeSpaces}}{{::weekend|removeSpaces}}">
+                  <div class="panel-body">
+                    <!-- Flight details start -->
+                    <h3>Flight Details</h3>
+
+                      <span ng-show="::isNotPrice(checkdates.latest_price)">No flight available.</span>
+                      <div ng-show="::!isNotPrice(checkdates.latest_price)" class="table-responsive">
+                      <table class="table table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Direction</th>
+                            <th>Operator</th>
+                            <th>Date</th>
+                            <th>Schedule</th>
+                            <th>Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Outbound</td>
+                            <td>{{::checkdates[dates[0]].there_operator}}</td>
+                            <td>{{::checkdates[dates[0]].there_date}}</td>
+                            <td>{{::checkdates[dates[0]].there_times}}</td>
+                            <td>{{::checkdates[dates[0]].there_time}}</td>
+                          </tr>
+                          <tr>
+                            <td>Return</td>
+                            <td>{{::checkdates[dates[0]].back_operator}}</td>
+                            <td>{{::checkdates[dates[0]].back_date}}</td>
+                            <td>{{::checkdates[dates[0]].back_times}}</td>
+                            <td>{{::checkdates[dates[0]].back_time}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- Flight details end -->
+                    <!-- Price history table start -->
+                    <h3>Price History</h3>
+                    <div class="table-responsive">
+                      <table class="table table-condensed">
+                        <thead>
+                          <tr>
+                            <th ng-repeat="date in ::dates">{{::date}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td ng-repeat="date in ::dates">{{::checkdates[date].price}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- Price history table end -->
+                    <button class="btn btn-danger {{::isNotPrice(checkdates.latest_price) && 'disabled' || ''}}">
+                      <span ng-show="::!isNotPrice(checkdates.latest_price)">Book for {{::checkdates.latest_price}}</span>
+                      <span ng-show="::isNotPrice(checkdates.latest_price)">No flight available</span>
+                    </button>
+                  </div>
+                </div>
+                <!-- Accordion body end -->
               </div>
-              <!-- Accordion body end -->
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- Body content end -->
   </div>
 </div>
 

@@ -2,3 +2,7 @@
 .btn:focus {
   outline: none;
 }
+
+.acctable td {
+  padding-left: 8px;
+}

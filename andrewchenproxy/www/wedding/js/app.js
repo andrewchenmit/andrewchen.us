@@ -1,4 +1,4 @@
-angular.module('example', []).
+angular.module('example', ['ngRoute']).
   config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {templateUrl: '/www/wedding/partials/home.html'}).
