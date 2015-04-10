@@ -42,8 +42,6 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     angular.forEach(dests, function(value, key) {
       result.push(key);
     });
-    console.log("SDLFJSDF");
-    console.log(result);
     return result;
   }
   $scope.filterLatestPrice = function(items) {
@@ -55,6 +53,30 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
       });
       return result;
   }
+  function format_prices(prices) {
+    var result = {};
+    for (var i=0;i<prices.length;i++) {
+      var ap = prices[i]['destination_airport'];
+      var price = prices[i]['price'];
+      price = parseInt(price.substring(1, price.length).replace(',',''));
+      if (!(ap in result)) {
+        result[ap] = [];
+      }
+      result[ap].push(price);
+    };
+    return result;
+  }
+  $http.get("pricesdb")
+    .success(function(data){
+      $scope.prices = format_prices(data);
+      console.log("SUCCESS");
+      console.log(format_prices(data));
+    })
+    .error(function() {
+      $scope.phones = "error in fetching data";
+      console.log("FAIL");
+    }
+  );
   $http.get("weekendfaresdb")
     .success(function(data){
       $scope.fares = format_data(data);
