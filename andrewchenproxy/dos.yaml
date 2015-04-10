@@ -1,17 +1,55 @@
 blacklist:
-- subnet: 93.159.230.90/24
+- subnet: 2.92.194.44/24
   description: keeps visiting forum.php
-- subnet: 93.159.230.88/24
+- subnet: 5.164.87.76/24
   description: keeps visiting forum.php
-- subnet: 93.159.230.28/24
+- subnet: 46.188.50.164/24
+  description: keeps visiting forum.php
+- subnet: 79.165.122.44/24
+  description: keeps visiting forum.php
+- subnet: 89.178.43.209/24
+  description: keeps visiting forum.php
+- subnet: 93.80.43.167/24
+  description: keeps visiting forum.php
+- subnet: 95.24.245.51/24
+  description: keeps visiting forum.php
+- subnet: 95.25.63.174/24
+  description: keeps visiting forum.php
+- subnet: 95.25.99.50/24
+  description: keeps visiting forum.php
+- subnet: 95.27.156.178/24
+  description: keeps visiting forum.php
+- subnet: 128.68.13.74/24
+  description: keeps visiting forum.php
+- subnet: 128.69.142.34/24
+  description: keeps visiting forum.php
+- subnet: 128.74.244.69/24
+  description: keeps visiting forum.php
+- subnet: 176.14.147.252/24
+  description: keeps visiting forum.php
+- subnet: 176.77.27.68/24
+  description: keeps visiting forum.php
+- subnet: 176.195.18.117/24
+  description: keeps visiting forum.php
+- subnet: 176.195.54.8/24
+  description: keeps visiting forum.php
+- subnet: 176.195.136.12/24
+  description: keeps visiting forum.php
+- subnet: 207.102.138.3/24
   description: keeps visiting forum.php
 - subnet: 77.41.114.115/24
   description: keeps visiting forum.php
+- subnet: 93.159.230.28/24
+  description: keeps visiting forum.php
+- subnet: 93.159.230.88/24
+  description: keeps visiting forum.php
+- subnet: 93.159.230.90/24
+  description: keeps visiting forum.php
+- subnet: 108.60.96.194
+  description: keeps visiting /games/java_trust.php
 - subnet: 208.80.194.127/24
-  description: keeps visiting k.php
-- subnet: 208.80.194.33/24
   description: keeps visiting k.php
 - subnet: 208.80.194.30/24
   description: keeps visiting k.php
-- subnet: 108.60.96.194
-  description: keeps visiting /games/java_trust.php
+- subnet: 208.80.194.33/24
+  description: keeps visiting k.php
