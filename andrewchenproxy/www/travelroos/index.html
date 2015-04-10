@@ -20,11 +20,18 @@
 <!--div class="partial-container" ng-view></div-->
 <div class="container-fluid">
   <h1>
-    Title
+    Weekend Getaway Opportunities
   </h1>
+  <p class="lead">
+    Tracks non-stop, roundtrip airfare for flights departing after 8p on Friday and returning before 10p the following Sunday.
+  </p>
+  <!--div>
+    Filter by destination airport code:
+    <input ng-model="destSearch">
+  </div-->
   <div class="row">
     <!--Body content-->
-    <div ng-repeat="(dest, weekends) in ::fares" >
+    <div ng-repeat="(dest, weekends) in fares | filter:destSearch" >
       <div class="col-lg-7">
         <div class="panel panel-primary">
           <div class="panel-heading">
