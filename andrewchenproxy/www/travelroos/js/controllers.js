@@ -53,6 +53,9 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
       });
       return result;
   }
+  function sortNumber(a,b) {
+    return b - a;
+  }
   function format_prices(prices) {
     var result = {};
     for (var i=0;i<prices.length;i++) {
@@ -63,6 +66,7 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
         result[ap] = [];
       }
       result[ap].push(price);
+      result[ap].sort(sortNumber);
     };
     return result;
   }
