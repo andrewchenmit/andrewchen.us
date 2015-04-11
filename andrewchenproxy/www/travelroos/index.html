@@ -116,6 +116,13 @@
                       </table>
                     </div>
                     <!-- Price history table end -->
+                    <!-- Percentile info start -->
+                    <div ng-show="::!isNotPrice(checkdates.latest_price)">
+                      <div><span ng-class="getPercentileStatus(getPercentile(checkdates.latest_price, dest))">{{::getPercentile(checkdates.latest_price, dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::checkdates.latest_price}}.</div>
+                      <div>{{::checkdates.latest_price}} is <span ng-class="getMedianStatus(getMedianDiff(checkdates.latest_price, dest))">{{::getMedianText(getMedianDiff(checkdates.latest_price, dest))}}</span> than the median of all weekend prices from {{::dest}}.</div>
+                    </div>
+                    <br/>
+                    <!-- Percentile info end -->
                     <a href="{{::checkdates[dates[0]].book_url}}" target="_blank" class="btn btn-danger" ng-show="::!isNotPrice(checkdates.latest_price)">Book for {{::checkdates.latest_price}}</a>
                     <button ng-show="::isNotPrice(checkdates.latest_price)" class="btn btn-danger {{::isNotPrice(checkdates.latest_price) && 'disabled' || ''}}">
                       <span >No flight available</span>

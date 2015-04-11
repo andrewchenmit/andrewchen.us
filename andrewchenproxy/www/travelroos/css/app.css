@@ -1,2 +1,13 @@
 /* Put your CSS here */
+.good {
+  color: lime;
+  font-weight: bold;
+}
+.bad {
+  color: red;
+  font-weight: bold;
+}
+.neutral {
+  color: black;
+  font-weight: bold;
 }

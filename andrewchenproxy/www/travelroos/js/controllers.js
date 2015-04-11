@@ -53,8 +53,65 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
       });
       return result;
   }
+  $scope.getPercentile = function(price, dest) {
+    if (price == 'n/a') { return 'n/a'; }
+    var price = parseInt(price.substring(1, price.length).replace(',', ''));
+    var dest = dest.substring(dest.length - 3, dest.length);
+    var prices = $scope.prices[dest];
+    // Percentile = % of prices lower than given price.
+    var lower_count = 0;
+    for (var i=0;i<prices.length;i++) {
+      if (prices[i] < price) {
+        lower_count += 1;
+      }
+    };
+    var result = Math.round(lower_count / prices.length * 100);
+    return result;
+  }
+  $scope.getMedianText = function(diff) {
+    var result = '';
+    if (diff < 0) {
+      result = '$' + Math.abs(diff).toString() + ' higher';
+    }
+    else if (diff > 0) {
+      result = '$' + Math.abs(diff).toString() + ' lower';
+    }
+    else if (diff == 0) {
+      result = 'the same';
+    }
+    return result;
+  }
+  $scope.getMedianDiff = function(price, dest) {
+    if (price == 'n/a') { return 'n/a'; }
+    var price = parseInt(price.substring(1, price.length).replace(',', ''));
+    var dest = dest.substring(dest.length - 3, dest.length);
+    var diff = $scope.medians[dest] - price;
+    return diff;
+  }
+  $scope.getMedianStatus = function(diff) {
+    if (diff > 50) {
+      return 'good';
+    }
+    else if (diff < 0) {
+      return 'bad';
+    }
+    else {
+      return 'neutral';
+    }
+  }
+  $scope.getPercentileStatus = function(diff) {
+    if (diff < 10) {
+      return 'good';
+    }
+    else if (diff > 20) {
+      return 'bad';
+    }
+    else {
+      return 'neutral';
+    }
+  }
   function sortNumber(a,b) {
-    return b - a;
+    return a - b;
   }
   function format_prices(prices) {
     var result = {};
@@ -70,14 +127,36 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     };
     return result;
   }
+  function get_dests() {
+    var result = [];
+    angular.forEach($scope.prices, function(value, key) {
+      if (!($.inArray(key, result) != -1)) {
+        result.push(key);
+      }
+    });
+    return result;
+  }
+  function get_medians() {
+    var dests = $scope.dests;
+    var prices = $scope.prices;
+
+    var result = {};
+    for (var i=0;i<dests.length;i++) {
+      var middle_index = Math.floor((prices[dests[i]].length - 1) / 2);
+      result[dests[i]] = prices[dests[i]][middle_index];
+    }
+    return result;
+  }
   $http.get("pricesdb")
     .success(function(data){
       $scope.prices = format_prices(data);
-      console.log("SUCCESS");
+      $scope.dests = get_dests();
+      $scope.medians = get_medians();
       console.log(format_prices(data));
+      console.log(get_dests());
+      console.log(get_medians(data));
     })
     .error(function() {
-      $scope.phones = "error in fetching data";
       console.log("FAIL");
     }
   );
@@ -85,12 +164,10 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     .success(function(data){
       $scope.fares = format_data(data);
       $scope.dates = extract_dates(data);
-      console.log("SUCCESS");
       console.log(format_data(data));
       console.log(extract_dates(data));
     })
     .error(function() {
-      $scope.phones = "error in fetching data";
       console.log("FAIL");
     }
   );
