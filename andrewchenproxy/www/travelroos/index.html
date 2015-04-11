@@ -25,9 +25,14 @@
   <p class="lead">
     Tracks non-stop, roundtrip airfare for flights departing after 8p on Friday and returning before 10p the following Sunday.
   </p>
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      Green panels like this indicate prices that are the lowest 10% ever seen and more than $50 less than the median for each particular destination.
+    </div>
+  </div>
   <div class="well row">
     <span style="width: 100px;">Filter by destination airport code:</span>
-    <input style="width: 500px;" placeholder="e.g. AUS, PDX, CUN, YVR, LAS, SAN, PHX, SLC, SEA, LAX, or SJD" ng-model="destSearch">
+    <input style="width: 500px;" placeholder="e.g. AUS, PDX, YVR, LAS, SAN, PHX, SLC, SEA, or LAX" ng-model="destSearch">
   </div>
   <div class="row">
     <!-- Body content -->
@@ -39,7 +44,7 @@
           </div>
           <div class="panel-body">
             <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
-              <div ng-repeat="(weekend, checkdates) in ::fares[dest]" class="panel panel-default">
+              <div ng-repeat="(weekend, checkdates) in ::fares[dest]" class="panel {{getPanelClass(getPercentile(checkdates.latest_price, dest), getMedianDiff(checkdates.latest_price, dest))}}">
                 <!-- Accordion heading start -->
                 <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend|removeSpaces}}">
                   <div class="panel-title">

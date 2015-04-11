@@ -68,6 +68,14 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     var result = Math.round(lower_count / prices.length * 100);
     return result;
   }
+  $scope.getPanelClass = function(percentile, median) {
+    if (percentile < 10 && median > 50) {
+      return 'panel-success';
+    }
+    else {
+      return 'panel-default';
+    }
+  }
   $scope.getMedianText = function(diff) {
     var result = '';
     if (diff < 0) {
