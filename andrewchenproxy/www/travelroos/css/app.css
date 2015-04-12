@@ -11,3 +11,11 @@
   color: black;
   font-weight: bold;
 }
+.panel-amazing {
+  border-color: #d6e9c6;
+}
+.panel-amazing>.panel-heading {
+  color: #010601;
+  background-color: #46C016;
+  border-color: #d6e9c6;
+}

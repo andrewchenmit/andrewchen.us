@@ -69,7 +69,10 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     return result;
   }
   $scope.getPanelClass = function(percentile, median) {
-    if (percentile < 10 && median > 50) {
+    if (percentile <= 1) {
+      return 'panel-amazing';
+    }
+    else if (percentile <= 10) {
       return 'panel-success';
     }
     else {
