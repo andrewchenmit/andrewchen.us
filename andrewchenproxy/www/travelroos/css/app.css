@@ -19,3 +19,18 @@
   background-color: #89C871;
   border-color: #d6e9c6;
 }
+.panel-amazing>.panel-inline {
+  color: #010601;
+  background-color: #89C871;
+  border-color: #d6e9c6;
+}
+.panel-success>.panel-inline {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.subtitle {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.4;
+}

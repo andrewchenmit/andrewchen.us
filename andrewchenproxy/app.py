@@ -5,7 +5,7 @@ from bootsmooth import router, render
 
 # Add Custom Routes to Controllers
 # import controllers
-router.addRoute('/weekendfaresdb', 'controllers.weekendfaresdb')
+router.addRoute('/flightdetailsdb', 'controllers.flightdetailsdb')
 router.addRoute('/pricesdb', 'controllers.pricesdb')
 
 # The BootController

@@ -5,7 +5,7 @@ import os
 import unicodedata
 from bootsmooth import utility, render
 
-class weekendfaresdb:
+class flightdetailsdb:
 
   def GET(self):
 
@@ -29,7 +29,7 @@ class weekendfaresdb:
     #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
     cursor=db.cursor()
 
-    select_sql="""SELECT * FROM fares"""
+    select_sql="""SELECT * FROM fares where latest = 1"""
 
     try:
       cursor.execute(select_sql)

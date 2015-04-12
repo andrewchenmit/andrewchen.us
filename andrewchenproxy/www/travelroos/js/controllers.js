@@ -1,7 +1,7 @@
 var weekendfaresApp = angular.module('weekendfaresApp', ['weekendfaresFilters']);
 
 weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
-  function format_data(d) {
+  function get_details_by_destdates(d) {
     result = {};
     for (var i=0;i<d.length;i++) {
       var candidate = 'SFO to ' + d[i].destination_airport;
@@ -21,7 +21,7 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     }
     return result;
   }
-  function extract_dates(d) {
+  function get_dates(d) {
     var date_array = [];
     for (var i=0; i<d.length; i++) {
       if ($.inArray(d[i]['check_date'], date_array) == -1) {
@@ -124,7 +124,7 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
   function sortNumber(a,b) {
     return a - b;
   }
-  function format_prices(prices) {
+  function get_prices_by_dest(prices) {
     var result = {};
     for (var i=0;i<prices.length;i++) {
       var ap = prices[i]['destination_airport'];
@@ -158,12 +158,13 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     }
     return result;
   }
+  // Get prices and medians by destination, and list of dests.
   $http.get("pricesdb")
     .success(function(data){
-      $scope.prices = format_prices(data);
+      $scope.prices = get_prices_by_dest(data);
       $scope.dests = get_dests();
       $scope.medians = get_medians();
-      console.log(format_prices(data));
+      console.log(get_prices_by_dest(data));
       console.log(get_dests());
       console.log(get_medians(data));
     })
@@ -171,12 +172,13 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
       console.log("FAIL");
     }
   );
-  $http.get("weekendfaresdb")
+  // Get latest flight details by destination, there_date, and back_date.
+  $http.get("flightdetailsdb")
     .success(function(data){
-      $scope.fares = format_data(data);
-      $scope.dates = extract_dates(data);
-      console.log(format_data(data));
-      console.log(extract_dates(data));
+      $scope.dates = get_dates(data);
+      $scope.fares = get_details_by_destdates(data);
+      console.log($scope.fares);
+      console.log($scope.dates);
     })
     .error(function() {
       console.log("FAIL");
