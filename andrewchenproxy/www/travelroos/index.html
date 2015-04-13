@@ -45,7 +45,7 @@
       <div class="col-lg-7">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">SFO to {{::dest}} (Median: ${{::medians[dest]}})</h3>
+            <h3 class="panel-title">SFO/SJC to {{::dest}} (Median: ${{::medians[dest]}})</h3>
           </div>
           <div class="panel-body">
             <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
@@ -115,12 +115,12 @@
                       <table class="table table-condensed">
                         <thead>
                           <tr>
-                            <th ng-repeat="date in ::dates">{{::date}}</th>
+                            <th ng-repeat="date in ::dates track by $index" ng-class="::getCheckdateClass($index)">{{::date}}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td ng-repeat="date in ::dates">{{::prices[dest][weekend_id][date].price_text}}</td>
+                            <td ng-repeat="date in ::dates track by $index" ng-class="::getCheckdateClass($index)" >{{::prices[dest][weekend_id][date].price_text}}</td>
                           </tr>
                         </tbody>
                       </table>

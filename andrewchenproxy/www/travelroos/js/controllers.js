@@ -38,6 +38,10 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
     }
     return result;
   }
+  $scope.getCheckdateClass = function(index) {
+    if (index != 0) { return 'old_date'; }
+    else { return ''; }
+  }
   $scope.isNotPrice = function(price) {
     if (price == -1) {
       return true;
