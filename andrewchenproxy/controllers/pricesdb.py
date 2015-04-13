@@ -28,10 +28,10 @@ class pricesdb:
     #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
     cursor=db.cursor()
 
-    today = datetime.date.today()
-    day = '{:02d}'.format(today.year) + '-' + '{:02d}'.format(today.month) + '-' + '{:02d}'.format(today.day)
+    #today = datetime.date.today()
+    #day = '{:02d}'.format(today.year) + '-' + '{:02d}'.format(today.month) + '-' + '{:02d}'.format(today.day)
 
-    select_sql="""SELECT destination_airport, there_date, back_date, check_date, price FROM fares WHERE there_date > '%s'""" % (day)
+    select_sql="""SELECT destination_airport, there_date, back_date, check_date, price FROM fares"""
 
     try:
       cursor.execute(select_sql)
