@@ -1,9 +1,8 @@
-import itertools
-import json
+import datetime
 import MySQLdb
 import os
 import unicodedata
-from bootsmooth import utility, render
+from bootsmooth import utility
 
 class pricesdb:
 
@@ -29,7 +28,10 @@ class pricesdb:
     #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
     cursor=db.cursor()
 
-    select_sql="""SELECT destination_airport, there_date, back_date, check_date, price FROM fares"""
+    today = datetime.date.today()
+    day = '{:02d}'.format(today.year) + '-' + '{:02d}'.format(today.month) + '-' + '{:02d}'.format(today.day)
+
+    select_sql="""SELECT destination_airport, there_date, back_date, check_date, price FROM fares WHERE there_date > '%s'""" % (day)
 
     try:
       cursor.execute(select_sql)

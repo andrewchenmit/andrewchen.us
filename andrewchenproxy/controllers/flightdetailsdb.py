@@ -1,9 +1,8 @@
-import itertools
-import json
+import datetime
 import MySQLdb
 import os
 import unicodedata
-from bootsmooth import utility, render
+from bootsmooth import utility
 
 class flightdetailsdb:
 
@@ -29,7 +28,10 @@ class flightdetailsdb:
     #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
     cursor=db.cursor()
 
-    select_sql="""SELECT * FROM fares where latest = 1"""
+    today = datetime.date.today()
+    day = '{:02d}'.format(today.year) + '-' + '{:02d}'.format(today.month) + '-' + '{:02d}'.format(today.day)
+
+    select_sql="""SELECT * FROM fares where latest = 1 and there_date > '%s'""" % (day)
 
     try:
       cursor.execute(select_sql)
@@ -68,4 +70,3 @@ class flightdetailsdb:
     result = eval(str(result))
 
     return utility.json_dump(result)
-    #return render.page('/www/travelroos/index.html')
