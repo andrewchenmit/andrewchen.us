@@ -163,6 +163,7 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
         result.push(key);
       }
     });
+    result.sort();
     return result;
   }
   function get_prices_by_dest(prices_by_dest_itinerary_checkdate) {
