@@ -45,11 +45,11 @@
       <div class="col-lg-7">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">SFO to {{::dest}}</h3>
+            <h3 class="panel-title">SFO to {{::dest}} (Median: ${{::medians[dest]}})</h3>
           </div>
           <div class="panel-body">
             <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
-              <div ng-repeat="(weekend_id, weekend_data) in ::latest_details[dest]" class="panel {{getPanelClass(getPercentile(weekend_data.price, dest), getMedianDiff(weekend_data.price, dest))}}">
+              <div ng-repeat="(weekend_id, weekend_data) in ::latest_details[dest]" class="panel {{::getPanelClass(getPercentile(weekend_data.price, dest), getMedianDiff(weekend_data.price, dest))}}">
                 <!-- Accordion heading start -->
                 <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}">
                   <div class="panel-title">
@@ -128,8 +128,8 @@
                     <!-- Price history table end -->
                     <!-- Percentile info start -->
                     <div ng-show="::!isNotPrice(weekend_data.price)">
-                      <div><span ng-class="getPercentileStatus(getPercentile(weekend_data.price, dest))">{{::getPercentile(weekend_data.price, dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::weekend_data.price_text}}.</div>
-                      <div>{{::weekend_data.price_text}} is <span ng-class="getMedianStatus(getMedianDiff(weekend_data.price, dest))">{{::getMedianText(getMedianDiff(weekend_data.price, dest))}}</span> than the median (${{medians[dest]}}) of all weekend prices from {{::dest}}.</div>
+                      <div><span ng-class="::getPercentileStatus(getPercentile(weekend_data.price, dest))">{{::getPercentile(weekend_data.price, dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::weekend_data.price_text}}.</div>
+                      <div>{{::weekend_data.price_text}} is <span ng-class="::getMedianStatus(getMedianDiff(weekend_data.price, dest))">{{::getMedianText(getMedianDiff(weekend_data.price, dest))}}</span> than the median (${{::medians[dest]}}) of all weekend prices from {{::dest}}.</div>
                     </div>
                     <br/>
                     <!-- Percentile info end -->
