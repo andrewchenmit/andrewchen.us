@@ -26,16 +26,14 @@
     <p>
       Non-stop, roundtrip flights departing after 8p Friday and returning before 10p Sunday.
     </p>
-    <div class="panel-success">
-      <p class="panel-inline">
-        Light green indicates prices among the lowest 10% ever seen for each particular destination.
-      </p>
-    </div>
-    <div class="panel-amazing">
-      <p class="panel-inline">
-        Green indicates prices among the lowest 1% ever seen for each particular destination.
-      </p>
-    </div>
+    <p class="panel-success">
+      <span class="panel-inline">Light green</span>
+      rows indicate prices among the lowest 10% ever seen for that destination.
+    </p>
+    <p class="panel-amazing">
+      <span class="panel-inline">Green</span>
+      rows indicate prices among the lowest 1% ever seen for that destination.
+    </p>
   </div>
   <div class="well row">
     <span style="width: 100px;">Filter by destination airport code:</span>
@@ -43,45 +41,45 @@
   </div>
   <div class="row">
     <!-- Body content -->
-    <div ng-repeat="dest in getDests(fares) | filter:destSearch">
+    <div ng-repeat="dest in dests | filter:destSearch">
       <div class="col-lg-7">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">{{::dest}}</h3>
+            <h3 class="panel-title">SFO to {{::dest}}</h3>
           </div>
           <div class="panel-body">
             <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
-              <div ng-repeat="(weekend, checkdates) in ::fares[dest]" class="panel {{getPanelClass(getPercentile(checkdates.latest_price, dest), getMedianDiff(checkdates.latest_price, dest))}}">
+              <div ng-repeat="(weekend_id, weekend_data) in ::latest_details[dest]" class="panel {{getPanelClass(getPercentile(weekend_data.price, dest), getMedianDiff(weekend_data.price, dest))}}">
                 <!-- Accordion heading start -->
-                <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend|removeSpaces}}">
+                <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}">
                   <div class="panel-title">
                     <div class="row">
                       <div class="col-xs-6">
-                        {{::weekend}}:
+                        {{::weekend_data.itinerary_text}}:
                       </div>
                       <div class="col-xs-2">
-                        <div ng-show="::!isNotPrice(checkdates.latest_price)">
-                          <a href="{{::checkdates.latest_book_url}}" target="_blank" role="button" class="">{{::checkdates.latest_price}}</a>
+                        <div ng-show="::!isNotPrice(weekend_data.price)">
+                          <a href="{{::weekend_data.book_url}}" target="_blank" role="button" class="">{{::weekend_data.price_text}}</a>
                         </div>
-                        <div ng-show="::isNotPrice(checkdates.latest_price)">
-                          <span>{{::checkdates.latest_price}}</span>
+                        <div ng-show="::isNotPrice(weekend_data.price)">
+                          <span>{{::weekend_data.price_text}}</span>
                         </div>
                       </div>
                       <div class="col-xs-4">
-                        <a data-toggle="collapse" data-parent="#accordion{{::dest|removeSpaces}}" href="#collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" role="button" class="">details + price history</a>
+                        <a data-toggle="collapse" data-parent="#accordion{{::dest|removeSpaces}}" href="#collapse{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}" role="button" class="">details + price history</a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- Accordion heading end -->
                 <!-- Accordion body start-->
-                <div id="collapse{{::dest|removeSpaces}}{{::weekend|removeSpaces}}" class="panel-collapse collapse" role="tabpanel" aria-lablledby="heading{{::dest|removeSpaces}}{{::weekend|removeSpaces}}">
+                <div id="collapse{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}" class="panel-collapse collapse" role="tabpanel" aria-lablledby="heading{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}">
                   <div class="panel-body">
                     <!-- Flight details start -->
                     <h3>Flight Details</h3>
 
-                      <span ng-show="::isNotPrice(checkdates.latest_price)">No flight available.</span>
-                      <div ng-show="::!isNotPrice(checkdates.latest_price)" class="table-responsive">
+                      <span ng-show="::isNotPrice(weekend_data.price)">No flight available.</span>
+                      <div ng-show="::!isNotPrice(weekend_data.price)" class="table-responsive">
                       <table class="table table-condensed">
                         <thead>
                           <tr>
@@ -95,17 +93,17 @@
                         <tbody>
                           <tr>
                             <td>Outbound</td>
-                            <td>{{::checkdates[dates[0]].there_operator}}</td>
-                            <td>{{::checkdates[dates[0]].there_date}}</td>
-                            <td>{{::checkdates[dates[0]].there_times}}</td>
-                            <td>{{::checkdates[dates[0]].there_time}}</td>
+                            <td>{{::weekend_data.there_operator}}</td>
+                            <td>{{::weekend_data.there_date}}</td>
+                            <td>{{::weekend_data.there_times}}</td>
+                            <td>{{::weekend_data.there_time}}</td>
                           </tr>
                           <tr>
                             <td>Return</td>
-                            <td>{{::checkdates[dates[0]].back_operator}}</td>
-                            <td>{{::checkdates[dates[0]].back_date}}</td>
-                            <td>{{::checkdates[dates[0]].back_times}}</td>
-                            <td>{{::checkdates[dates[0]].back_time}}</td>
+                            <td>{{::weekend_data.back_operator}}</td>
+                            <td>{{::weekend_data.back_date}}</td>
+                            <td>{{::weekend_data.back_times}}</td>
+                            <td>{{::weekend_data.back_time}}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -122,21 +120,21 @@
                         </thead>
                         <tbody>
                           <tr>
-                            <td ng-repeat="date in ::dates">{{::checkdates[date].price}}</td>
+                            <td ng-repeat="date in ::dates">{{::prices[dest][weekend_id][date].price_text}}</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                     <!-- Price history table end -->
                     <!-- Percentile info start -->
-                    <div ng-show="::!isNotPrice(checkdates.latest_price)">
-                      <div><span ng-class="getPercentileStatus(getPercentile(checkdates.latest_price, dest))">{{::getPercentile(checkdates.latest_price, dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::checkdates.latest_price}}.</div>
-                      <div>{{::checkdates.latest_price}} is <span ng-class="getMedianStatus(getMedianDiff(checkdates.latest_price, dest))">{{::getMedianText(getMedianDiff(checkdates.latest_price, dest))}}</span> than the median of all weekend prices from {{::dest}}.</div>
+                    <div ng-show="::!isNotPrice(weekend_data.price)">
+                      <div><span ng-class="getPercentileStatus(getPercentile(weekend_data.price, dest))">{{::getPercentile(weekend_data.price, dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::weekend_data.price_text}}.</div>
+                      <div>{{::weekend_data.price_text}} is <span ng-class="getMedianStatus(getMedianDiff(weekend_data.price, dest))">{{::getMedianText(getMedianDiff(weekend_data.price, dest))}}</span> than the median (${{medians[dest]}}) of all weekend prices from {{::dest}}.</div>
                     </div>
                     <br/>
                     <!-- Percentile info end -->
-                    <a href="{{::checkdates[dates[0]].book_url}}" target="_blank" class="btn btn-danger" ng-show="::!isNotPrice(checkdates.latest_price)">Book for {{::checkdates.latest_price}}</a>
-                    <button ng-show="::isNotPrice(checkdates.latest_price)" class="btn btn-danger {{::isNotPrice(checkdates.latest_price) && 'disabled' || ''}}">
+                    <a href="{{::weekend_data.book_url}}" target="_blank" class="btn btn-danger" ng-show="::!isNotPrice(weekend_data.price)">Book for {{::weekend_data.price_text}}</a>
+                    <button ng-show="::isNotPrice(weekend_data.price)" class="btn btn-danger {{::isNotPrice(weekend_data.price) && 'disabled' || ''}}">
                       <span >No flight available</span>
                     </button>
                   </div>
