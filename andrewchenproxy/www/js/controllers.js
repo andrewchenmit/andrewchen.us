@@ -1,7 +1,7 @@
-function ExamplesCtrl($scope, $http) {
+var exampleControllers = angular.module('exampleControllers', ['ngRoute']);
+
+exampleControllers.controller('ExamplesCtrl', function ($scope, $http) {
 	$http.get('/test').success(function(person){
-		console.log(person);
-		
 		$scope.messages = [
 			{content: 'Hello'},
 			{content: 'Who are you?'}, 
@@ -9,7 +9,6 @@ function ExamplesCtrl($scope, $http) {
 			{content: 'OK'},
 			{content: 'Let\'s get it'}
 		];
-		
 		$scope.person = person;
 	});
-}
+});

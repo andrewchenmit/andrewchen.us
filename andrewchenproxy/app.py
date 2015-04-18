@@ -7,6 +7,7 @@ from bootsmooth import router, render
 # import controllers
 router.addRoute('/flightdetailsdb', 'controllers.flightdetailsdb')
 router.addRoute('/pricesdb', 'controllers.pricesdb')
+router.addRoute('/test', 'controllers.test')
 
 # The BootController
 # This is the default controller, routed to handle all paths -> /(.*)
