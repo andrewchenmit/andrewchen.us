@@ -57,7 +57,7 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, dbPr
   $scope.getPercentileStatus = viewLogicSrvc.getPercentileStatus;
 
   // Get prices by (dest ,itinerary, checkdate), dests, dates, prices by dest, and medians by destination.
-  $http.get("3daypricesdb")
+  $http.get("threedaypricesdb")
     .success(function(data){
       $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
       $scope.dests = dbProcessingSrvc.get_dests($scope.prices);
@@ -80,7 +80,7 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, dbPr
     }
   );
   // Get latest flight details by destination, itinerary.
-  $http.get("3dayflightdetailsdb")
+  $http.get("threedayflightdetailsdb")
     .success(function(data){
       $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(data);
       console.log("Latest flight details by dest, itinerary (latest_details): ");
