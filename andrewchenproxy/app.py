@@ -7,6 +7,8 @@ from bootsmooth import router, render
 # import controllers
 router.addRoute('/flightdetailsdb', 'controllers.flightdetailsdb')
 router.addRoute('/pricesdb', 'controllers.pricesdb')
+router.addRoute('/threedayflightdetailsdb', 'controllers.threedayflightdetailsdb')
+router.addRoute('/threedaypricesdb', 'controllers.threedaypricesdb')
 router.addRoute('/test', 'controllers.test')
 
 # The BootController
