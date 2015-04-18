@@ -34,7 +34,8 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
       result[candidate1][candidate2] = d[i];
 
       // Store itinerary display text.
-      result[candidate1][candidate2]['itinerary_text'] = d[i].there_date + ' to ' + d[i].back_date;
+      result[candidate1][candidate2]['itinerary_dates'] = d[i].there_date + ' to ' + d[i].back_date;
+      result[candidate1][candidate2]['itinerary_text'] = d[i].there_date + ' to ' + d[i].back_period;
     }
     return result;
   }
@@ -152,7 +153,8 @@ weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
       // Store price and itinerary text for each dest-itinerary combo.
       result[ap][itinerary][check_date]['price'] = price;
       result[ap][itinerary][check_date]['price_text'] = price_text;
-      result[ap][itinerary][check_date]['itinerary_text'] = data[i]['there_date'] + ' to ' + data[i]['back_date'];;
+      result[ap][itinerary][check_date]['itinerary_dates'] = data[i]['there_date'] + ' to ' + data[i]['back_date'];;
+      result[ap][itinerary][check_date]['itinerary_text'] = data[i]['there_date'] + ' to ' + data[i]['back_period'];;
     };
     return result;
   }
