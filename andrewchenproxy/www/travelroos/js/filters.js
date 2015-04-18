@@ -1,6 +1,6 @@
-angular.module('weekendfaresFilters', [])
+var weekendfaresFilters = angular.module('weekendfaresFilters', []);
 
-.filter('removeSpaces', [function() {
+weekendfaresFilters.filter('removeSpaces', [function() {
   return function(string) {
     if (!angular.isString(string)) {
       return string;

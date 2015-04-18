@@ -1,4 +1,4 @@
-var exampleControllers = angular.module('exampleControllers', ['ngRoute']);
+var exampleControllers = angular.module('exampleControllers', []);
 
 exampleControllers.controller('ExamplesCtrl', function ($scope, $http) {
 	$http.get('/test').success(function(person){

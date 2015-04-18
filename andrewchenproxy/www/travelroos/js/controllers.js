@@ -1,6 +1,6 @@
-var weekendfaresApp = angular.module('weekendfaresApp', ['weekendfaresFilters']);
+var weekendfaresControllers = angular.module('weekendfaresControllers', []);
 
-weekendfaresApp.controller('FaresCtrl', function ($scope, $http) {
+weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http) {
   function getPriceAndPriceText(price_text) {
     var price_text = price_text;
     var price = -1;
