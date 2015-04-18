@@ -1,0 +1,110 @@
+  <div class="row">
+    <!-- Body content -->
+    <div ng-repeat="dest in dests | filter:destSearch">
+      <div class="col-lg-7">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">SFO/SJC to {{::dest}} (Median: ${{::medians[dest]}}, Lowest: ${{::prices_by_dest[dest][0]}})</h3>
+          </div>
+          <div class="panel-body">
+            <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
+              <div ng-repeat="(weekend_id, weekend_data) in ::latest_details[dest]" class="panel {{::getPanelClass(getPercentile(weekend_data.price, dest), getMedianDiff(weekend_data.price, dest))}}">
+                <!-- Accordion heading start -->
+                <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}">
+                  <div class="panel-title">
+                    <div class="row">
+                      <div class="col-xs-6">
+                        {{::weekend_data.itinerary_text}}:
+                      </div>
+                      <div class="col-xs-2">
+                        <div ng-show="::!isNotPrice(weekend_data.price)">
+                          <a href="{{::weekend_data.book_url}}" target="_blank" role="button" class="">{{::weekend_data.price_text}}</a>
+                        </div>
+                        <div ng-show="::isNotPrice(weekend_data.price)">
+                          <span>{{::weekend_data.price_text}}</span>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <a data-toggle="collapse" data-parent="#accordion{{::dest|removeSpaces}}" href="#collapse{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}" aria-expanded="false" aria-controls="collapse{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}" role="button" class="">details + price history</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Accordion heading end -->
+                <!-- Accordion body start-->
+                <div id="collapse{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}" class="panel-collapse collapse" role="tabpanel" aria-lablledby="heading{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}">
+                  <div class="panel-body">
+                    <!-- Flight details start -->
+                    <h3>Flight Details</h3>
+
+                      <span ng-show="::isNotPrice(weekend_data.price)">No flight available.</span>
+                      <div ng-show="::!isNotPrice(weekend_data.price)" class="table-responsive">
+                      <table class="table table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Direction</th>
+                            <th>Operator</th>
+                            <th>Date</th>
+                            <th>Schedule</th>
+                            <th>Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Outbound</td>
+                            <td>{{::weekend_data.there_operator}}</td>
+                            <td>{{::weekend_data.there_date}}</td>
+                            <td>{{::weekend_data.there_times}}</td>
+                            <td>{{::weekend_data.there_time}}</td>
+                          </tr>
+                          <tr>
+                            <td>Return</td>
+                            <td>{{::weekend_data.back_operator}}</td>
+                            <td>{{::weekend_data.back_date}}</td>
+                            <td>{{::weekend_data.back_times}}</td>
+                            <td>{{::weekend_data.back_time}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- Flight details end -->
+                    <!-- Price history table start -->
+                    <h3>Price History</h3>
+                    <div class="table-responsive">
+                      <table class="table table-condensed">
+                        <thead>
+                          <tr>
+                            <th ng-repeat="date in ::dates track by $index" ng-class="::getCheckdateClass($index)">{{::date}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td ng-repeat="date in ::dates track by $index" ng-class="::getCheckdateClass($index)" >{{::prices[dest][weekend_id][date].price_text}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- Price history table end -->
+                    <!-- Percentile info start -->
+                    <div ng-show="::!isNotPrice(weekend_data.price)">
+                      <div><span ng-class="::getPercentileStatus(getPercentile(weekend_data.price, dest))">{{::getPercentile(weekend_data.price, dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::weekend_data.price_text}}.</div>
+                      <div>{{::weekend_data.price_text}} is <span ng-class="::getMedianStatus(getMedianDiff(weekend_data.price, dest))">{{::getMedianText(getMedianDiff(weekend_data.price, dest))}}</span> than the median (${{::medians[dest]}}) of all weekend prices from {{::dest}}.</div>
+                    </div>
+                    <br/>
+                    <!-- Percentile info end -->
+                    <a href="{{::weekend_data.book_url}}" target="_blank" class="btn btn-danger" ng-show="::!isNotPrice(weekend_data.price)">Book for {{::weekend_data.price_text}}</a>
+                    <button ng-show="::isNotPrice(weekend_data.price)" class="btn btn-danger {{::isNotPrice(weekend_data.price) && 'disabled' || ''}}">
+                      <span >No flight available</span>
+                    </button>
+                  </div>
+                </div>
+                <!-- Accordion body end -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Body content end -->
+  </div>
+
