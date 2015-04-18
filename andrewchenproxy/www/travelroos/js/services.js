@@ -126,3 +126,80 @@ weekendfaresServices.service('dbProcessingSrvc', function() {
     return result;
   }
 });
+
+weekendfaresServices.service('viewLogicSrvc', function() {
+  this.getCheckdateClass = function(index) {
+    if (index != 0) { return 'old_date'; }
+    else { return ''; }
+  }
+  this.isNotPrice = function(price) {
+    if (price == -1) {
+      return true;
+    }
+    return false;
+  }
+  this.getPercentile = function(price, dest, prices_by_dest) {
+    if (price == -1) { return 'n/a'; }
+    var prices = prices_by_dest[dest];
+    // Percentile = % of prices lower than given price.
+    var lower_count = 0;
+    for (var i=0;i<prices.length;i++) {
+      if (prices[i] < price) {
+        lower_count += 1;
+      }
+    };
+    var result = Math.round(lower_count / prices.length * 100);
+    return result;
+  }
+  this.getPanelClass = function(percentile, median) {
+    if (percentile <= 1) {
+      return 'panel-amazing';
+    }
+    else if (percentile <= 10) {
+      return 'panel-success';
+    }
+    else {
+      return 'panel-default';
+    }
+  }
+  this.getMedianText = function(diff) {
+    var result = '';
+    if (diff < 0) {
+      result = '$' + Math.abs(diff).toString() + ' higher';
+    }
+    else if (diff > 0) {
+      result = '$' + Math.abs(diff).toString() + ' lower';
+    }
+    else if (diff == 0) {
+      result = 'the same';
+    }
+    return result;
+  }
+  this.getMedianDiff = function(price, dest, medians) {
+    if (price == -1) { return 'n/a'; }
+    var diff = medians[dest] - price;
+    return diff;
+  }
+  this.getMedianStatus = function(diff) {
+    if (diff > 50) {
+      return 'good';
+    }
+    else if (diff < 0) {
+      return 'bad';
+    }
+    else {
+      return 'neutral';
+    }
+  }
+  this.getPercentileStatus = function(diff) {
+    if (diff < 10) {
+      return 'good';
+    }
+    else if (diff > 20) {
+      return 'bad';
+    }
+    else {
+      return 'neutral';
+    }
+  }
+});

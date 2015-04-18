@@ -1,90 +1,16 @@
 var weekendfaresControllers = angular.module('weekendfaresControllers', []);
 
-weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, dbProcessingSrvc) {
-  $scope.getCheckdateClass = function(index) {
-    if (index != 0) { return 'old_date'; }
-    else { return ''; }
-  }
-  $scope.isNotPrice = function(price) {
-    if (price == -1) {
-      return true;
-    }
-    return false;
-  }
-  $scope.filterLatestPrice = function(items) {
-      var result = {};
-      angular.forEach(items, function(value, key) {
-        if (key.indexOf('latest') == -1 && key.indexOf('book') == -1) {
-          result[key] = value;
-        }
-      });
-      return result;
-  }
-  $scope.getPercentile = function(price, dest) {
-    if (price == -1) { return 'n/a'; }
-    var prices = $scope.prices_by_dest[dest];
-    // Percentile = % of prices lower than given price.
-    var lower_count = 0;
-    for (var i=0;i<prices.length;i++) {
-      if (prices[i] < price) {
-        lower_count += 1;
-      }
-    };
-    var result = Math.round(lower_count / prices.length * 100);
-    return result;
-  }
-  $scope.getPanelClass = function(percentile, median) {
-    if (percentile <= 1) {
-      return 'panel-amazing';
-    }
-    else if (percentile <= 10) {
-      return 'panel-success';
-    }
-    else {
-      return 'panel-default';
-    }
-  }
-  $scope.getMedianText = function(diff) {
-    var result = '';
-    if (diff < 0) {
-      result = '$' + Math.abs(diff).toString() + ' higher';
-    }
-    else if (diff > 0) {
-      result = '$' + Math.abs(diff).toString() + ' lower';
-    }
-    else if (diff == 0) {
-      result = 'the same';
-    }
-    return result;
-  }
-  $scope.getMedianDiff = function(price, dest) {
-    if (price == -1) { return 'n/a'; }
-    var diff = $scope.medians[dest] - price;
-    return diff;
-  }
-  $scope.getMedianStatus = function(diff) {
-    if (diff > 50) {
-      return 'good';
-    }
-    else if (diff < 0) {
-      return 'bad';
-    }
-    else {
-      return 'neutral';
-    }
-  }
-  $scope.getPercentileStatus = function(diff) {
-    if (diff < 10) {
-      return 'good';
-    }
-    else if (diff > 20) {
-      return 'bad';
-    }
-    else {
-      return 'neutral';
-    }
-  }
-  // Get prices by (dest,itinerary,checkdate), medians by destination, and list of dests.
+weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, dbProcessingSrvc, viewLogicSrvc) {
+  $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
+  $scope.isNotPrice = viewLogicSrvc.isNotPrice;
+  $scope.getPercentile = viewLogicSrvc.getPercentile;
+  $scope.getPanelClass = viewLogicSrvc.getPanelClass;
+  $scope.getMedianText = viewLogicSrvc.getMedianText;
+  $scope.getMedianDiff = viewLogicSrvc.getMedianDiff;
+  $scope.getMedianStatus = viewLogicSrvc.getMedianStatus;
+  $scope.getPercentileStatus = viewLogicSrvc.getPercentileStatus;
+
+  // Get prices by (dest ,itinerary, checkdate), dests, dates, prices by dest, and medians by destination.
   $http.get("pricesdb")
     .success(function(data){
       $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
