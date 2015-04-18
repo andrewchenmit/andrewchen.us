@@ -1,44 +1,6 @@
 var weekendfaresControllers = angular.module('weekendfaresControllers', []);
 
-weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http) {
-  function getPriceAndPriceText(price_text) {
-    var price_text = price_text;
-    var price = -1;
-    if (price_text != 'n/a') {
-      price = parseInt(price_text.substring(1, price_text.length).replace(',',''));
-    }
-    return [price, price_text];
-  }
-  function get_details_by_dest_itinerary(d) {
-    result = {};
-    for (var i=0;i<d.length;i++) {
-
-      // Format price text and price.
-      var price_data = getPriceAndPriceText(d[i].price);
-      d[i].price = price_data[0];
-      d[i].price_text = price_data[1];
-
-      // Key by destination airport.
-      var candidate1 = d[i].destination_airport;
-      if (!(candidate1 in result)) {
-        result[candidate1] = {};
-      }
-
-      // Key by itinerary dates.
-      var candidate2 = d[i].there_date+d[i].back_date;
-      if (!(candidate2 in result[candidate1])) {
-        result[candidate1][candidate2] = {};
-      }
-
-      // Store flight details by itinerary dates.
-      result[candidate1][candidate2] = d[i];
-
-      // Store itinerary display text.
-      result[candidate1][candidate2]['itinerary_dates'] = d[i].there_date + ' to ' + d[i].back_date;
-      result[candidate1][candidate2]['itinerary_text'] = d[i].there_date + ' to ' + d[i].back_period;
-    }
-    return result;
-  }
+weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, dbProcessingSrvc) {
   $scope.getCheckdateClass = function(index) {
     if (index != 0) { return 'old_date'; }
     else { return ''; }
@@ -122,112 +84,24 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http) {
       return 'neutral';
     }
   }
-  function sortNumber(a,b) {
-    return a - b;
-  }
-  function get_prices_by_dest_itinerary_checkdate(data) {
-    var result = {};
-    for (var i=0;i<data.length;i++) {
-      var ap = data[i]['destination_airport'];
-      var price_data = getPriceAndPriceText(data[i]['price']);
-      var price = price_data[0];
-      var price_text = price_data[1];
-
-      // Key by destination airport.
-      if (!(ap in result)) {
-        result[ap] = {};
-      }
-
-      // Key by itinerary.
-      var itinerary = data[i]['there_date'] + data[i]['back_date'];
-      if (!(itinerary in result[ap])) {
-        result[ap][itinerary] = {};
-      }
-
-      // Key by check_date.
-      var check_date = data[i]['check_date'];
-      if (!(check_date in result[ap][itinerary])) {
-        result[ap][itinerary][check_date] = {};
-      }
-
-      // Store price and itinerary text for each dest-itinerary combo.
-      result[ap][itinerary][check_date]['price'] = price;
-      result[ap][itinerary][check_date]['price_text'] = price_text;
-      result[ap][itinerary][check_date]['itinerary_dates'] = data[i]['there_date'] + ' to ' + data[i]['back_date'];;
-      result[ap][itinerary][check_date]['itinerary_text'] = data[i]['there_date'] + ' to ' + data[i]['back_period'];;
-    };
-    return result;
-  }
-  function get_dests() {
-    var result = [];
-    angular.forEach($scope.prices, function(value, key) {
-      if (!($.inArray(key, result) != -1)) {
-        result.push(key);
-      }
-    });
-    result.sort();
-    return result;
-  }
-  function get_prices_by_dest(prices_by_dest_itinerary_checkdate) {
-    var result = {};
-    angular.forEach(prices_by_dest_itinerary_checkdate, function(value0, dest) {
-      var prices_list = [];
-      angular.forEach(value0, function(value, key) {
-        angular.forEach(value, function(value2, key2) {
-          if (value2.price != -1) {
-            prices_list.push(value2.price);
-          }
-        });
-      });
-      prices_list.sort(sortNumber);
-      result[dest] = prices_list;
-    });
-    return result;
-  }
-  function get_medians_by_dest() {
-    var prices_by_dest = $scope.prices_by_dest;
-
-    var result = {};
-    angular.forEach(prices_by_dest, function(value, dest) {
-      var prices_list = value;
-      var middle_index = Math.floor((prices_list.length - 1) / 2);
-      result[dest] = prices_list[middle_index];
-    });
-    return result;
-  }
-  function get_checkdates(prices_by_dest_itinerary_checkdate) {
-    var date_array = [];
-    var result = [];
-    angular.forEach(prices_by_dest_itinerary_checkdate, function(value, dest) {
-      angular.forEach(value, function(value1, key1) {
-        angular.forEach(value1, function(value2, check_date) {
-          if ($.inArray(check_date, result) == -1) {
-            result.push(check_date);
-          }
-        });
-      });
-    });
-    result.sort().reverse();
-    return result;
-  }
   // Get prices by (dest,itinerary,checkdate), medians by destination, and list of dests.
   $http.get("pricesdb")
     .success(function(data){
-      $scope.prices = get_prices_by_dest_itinerary_checkdate(data);
-      $scope.dests = get_dests();
-      $scope.dates = get_checkdates($scope.prices);
-      $scope.prices_by_dest = get_prices_by_dest($scope.prices);
-      $scope.medians = get_medians_by_dest();
+      $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
+      $scope.dests = dbProcessingSrvc.get_dests($scope.prices);
+      $scope.dates = dbProcessingSrvc.get_checkdates($scope.prices);
+      $scope.prices_by_dest = dbProcessingSrvc.get_prices_by_dest($scope.prices);
+      $scope.medians = dbProcessingSrvc.get_medians_by_dest($scope.prices_by_dest);
       console.log("Destinations (dests): ");
       console.log($scope.dests);
       console.log("Prices by destination, itinerary, and check date (prices): ");
-      console.log(get_prices_by_dest_itinerary_checkdate(data));
+      console.log($scope.prices);
       console.log("Check dates (dates): ");
       console.log($scope.dates);
       console.log("Prices by destination (prices_by_dest): ");
-      console.log(get_prices_by_dest($scope.prices));
+      console.log($scope.prices_by_dest);
       console.log("Medians by dest (medians): ");
-      console.log(get_medians_by_dest(data));
+      console.log($scope.medians);
     })
     .error(function() {
       console.log("FAIL");
@@ -236,7 +110,7 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http) {
   // Get latest flight details by destination, itinerary.
   $http.get("flightdetailsdb")
     .success(function(data){
-      $scope.latest_details = get_details_by_dest_itinerary(data);
+      $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(data);
       console.log("Latest flight details by dest, itinerary (latest_details): ");
       console.log($scope.latest_details);
     })

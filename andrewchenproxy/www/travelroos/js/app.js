@@ -1,6 +1,7 @@
 var weekendfaresApp = angular.module('weekendfaresApp', [
   'ngRoute',
   'weekendfaresControllers',
+  'weekendfaresServices',
   'weekendfaresFilters'
 ]);
 

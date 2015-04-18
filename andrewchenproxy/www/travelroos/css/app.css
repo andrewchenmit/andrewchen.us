@@ -37,3 +37,19 @@
 .old_date {
   color: rgba(84, 84, 84, 0.65);
 }
+.span_link {
+  color: #337ab7;
+  text-decoration: none;
+}
+.span_link:active, .span_link:hover {
+  outline: 0;
+}
+.span_link:hover {
+  color: #23527c;
+  text-decoration: underline;
+}
+.span_link:focus {
+  outline: thin dotted;
+  outline:5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
