@@ -38,7 +38,7 @@ weekendfaresServices.service('dbProcessingSrvc', function() {
 
       // Store itinerary display text.
       result[candidate1][candidate2]['itinerary_dates'] = d[i].there_date + ' to ' + d[i].back_date;
-      result[candidate1][candidate2]['itinerary_text'] = d[i].there_date + ' to ' + d[i].back_period;
+      result[candidate1][candidate2]['itinerary_text'] = d[i].there_date + ' ' + d[i].there_period + ' to ' + d[i].back_period;
     }
     return result;
   }
@@ -71,7 +71,7 @@ weekendfaresServices.service('dbProcessingSrvc', function() {
       result[ap][itinerary][check_date]['price'] = price;
       result[ap][itinerary][check_date]['price_text'] = price_text;
       result[ap][itinerary][check_date]['itinerary_dates'] = data[i]['there_date'] + ' to ' + data[i]['back_date'];;
-      result[ap][itinerary][check_date]['itinerary_text'] = data[i]['there_date'] + ' to ' + data[i]['back_period'];;
+      result[ap][itinerary][check_date]['itinerary_text'] = data[i]['there_date'] + ' ' + data[i]['there_period'] + ' to ' + data[i]['back_period'];;
     };
     return result;
   }
