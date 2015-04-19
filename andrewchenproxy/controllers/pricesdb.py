@@ -74,6 +74,6 @@ class pricesdb:
 
     result = eval(str(result))
 
-    memcache.add('pricesdb', result, 25200) # 7 hours.
+    memcache.add('pricesdb', result, 86400) # 24 hours.
 
     return utility.json_dump(result)

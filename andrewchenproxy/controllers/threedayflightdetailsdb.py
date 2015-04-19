@@ -74,6 +74,6 @@ class threedayflightdetailsdb:
 
     result = eval(str(result))
 
-    memcache.add('threedayflightdetailsdb', result, 25200) # 7 hours.
+    memcache.add('threedayflightdetailsdb', result, 86400) # 24 hours.
 
     return utility.json_dump(result)
