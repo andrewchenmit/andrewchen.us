@@ -9,6 +9,7 @@ router.addRoute('/flightdetailsdb', 'controllers.flightdetailsdb')
 router.addRoute('/pricesdb', 'controllers.pricesdb')
 router.addRoute('/threedayflightdetailsdb', 'controllers.threedayflightdetailsdb')
 router.addRoute('/threedaypricesdb', 'controllers.threedaypricesdb')
+router.addRoute('/clearmemcache', 'controllers.clearmemcache')
 router.addRoute('/test', 'controllers.test')
 
 # The BootController

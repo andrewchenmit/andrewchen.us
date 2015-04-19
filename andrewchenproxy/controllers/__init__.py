@@ -3,3 +3,4 @@ from pricesdb import *
 from flightdetailsdb import *
 from threedaypricesdb import *
 from threedayflightdetailsdb import *
+from clearmemcache import *
