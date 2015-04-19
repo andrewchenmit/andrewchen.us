@@ -3,10 +3,15 @@ import MySQLdb
 import os
 import unicodedata
 from bootsmooth import utility
+from google.appengine.api import memcache
 
 class flightdetailsdb:
 
   def GET(self):
+
+    result = memcache.get('flightdetailsdb')
+    if result is not None:
+      return utility.json_dump(result)
 
     # Define your production Cloud SQL instance information.
     _INSTANCE_NAME = 'weekendairfare:fares'
@@ -68,5 +73,7 @@ class flightdetailsdb:
       result.append(row)
 
     result = eval(str(result))
+
+    memcache.add('flightdetailsdb', result, 25200) # 7 hours.
 
     return utility.json_dump(result)
