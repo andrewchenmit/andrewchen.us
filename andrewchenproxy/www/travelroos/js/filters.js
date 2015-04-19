@@ -5,6 +5,6 @@ weekendfaresFilters.filter('removeSpaces', [function() {
     if (!angular.isString(string)) {
       return string;
     }
-    return string.replace(/[\s]/g, '');
+    return string.replace(/[\s]/g, '').replace(',', '');
   };
 }])
