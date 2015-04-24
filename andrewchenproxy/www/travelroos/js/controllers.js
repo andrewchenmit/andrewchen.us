@@ -1,6 +1,11 @@
 var weekendfaresControllers = angular.module('weekendfaresControllers', []);
 
-weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, dbProcessingSrvc, viewLogicSrvc) {
+weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeout, dbProcessingSrvc, viewLogicSrvc) {
+  $scope.loading = true;
+  $timeout(function() {
+    console.log("VIEW CONTENT LOADED");
+    $scope.loading = false;
+  }, 500);
   $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
   $scope.isNotPrice = viewLogicSrvc.isNotPrice;
   $scope.getPercentile = viewLogicSrvc.getPercentile;
@@ -52,7 +57,12 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, dbProc
   );
 });
 
-weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, dbProcessingSrvc, viewLogicSrvc) {
+weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $timeout, dbProcessingSrvc, viewLogicSrvc) {
+  $scope.loading = true;
+  $timeout(function() {
+    console.log("VIEW CONTENT LOADED");
+    $scope.loading = false;
+  }, 500);
   $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
   $scope.isNotPrice = viewLogicSrvc.isNotPrice;
   $scope.getPercentile = viewLogicSrvc.getPercentile;

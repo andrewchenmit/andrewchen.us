@@ -1,6 +1,9 @@
   <div class="row">
     <!-- Body content -->
-    <div ng-repeat="dest in dests | filter:destSearch">
+    <div class="three-quarters loader" ng-show="loading">
+      Loading...
+    </div>
+    <div ng-repeat="dest in ::dests | filter:destSearch">
       <div class="col-lg-7">
         <div class="panel panel-primary">
           <div class="panel-heading">

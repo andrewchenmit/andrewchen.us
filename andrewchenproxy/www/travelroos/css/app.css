@@ -56,3 +56,6 @@
 .view {
   height: 100%;
 }
+.loader {
+  margin-left: 15px;
+}
