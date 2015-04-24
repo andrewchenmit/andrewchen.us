@@ -2,10 +2,6 @@ var weekendfaresControllers = angular.module('weekendfaresControllers', []);
 
 weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeout, dbProcessingSrvc, viewLogicSrvc) {
   $scope.loading = true;
-  $timeout(function() {
-    console.log("VIEW CONTENT LOADED");
-    $scope.loading = false;
-  }, 500);
   $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
   $scope.isNotPrice = viewLogicSrvc.isNotPrice;
   $scope.getPercentile = viewLogicSrvc.getPercentile;
@@ -18,7 +14,6 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeo
   // Get prices by (dest ,itinerary, checkdate), dests, dates, prices by dest, and medians by destination.
   $http.get("pricesdb")
     .success(function(data){
-      var timestamp = Date.now();
       $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
       $scope.dests = dbProcessingSrvc.get_dests($scope.prices);
       $scope.dates = dbProcessingSrvc.get_checkdates($scope.prices);
@@ -34,8 +29,6 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeo
       console.log($scope.prices_by_dest);
       console.log("Medians by dest (medians): ");
       console.log($scope.medians);
-      console.log('JS time: ');
-      console.log(Date.now() - timestamp);
     })
     .error(function() {
       console.log("FAIL");
@@ -44,12 +37,15 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeo
   // Get latest flight details by destination, itinerary.
   $http.get("flightdetailsdb")
     .success(function(data){
-      var timestamp = Date.now();
       $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(data);
       console.log("Latest flight details by dest, itinerary (latest_details): ");
       console.log($scope.latest_details);
-      console.log('JS time: ');
-      console.log(Date.now() - timestamp);
+      var timestamp = Date.now();
+      $timeout(function() {
+        $scope.loading = false;
+        console.log('LOADER JS time: ');
+        console.log(Date.now() - timestamp);
+      }, 500);
     })
     .error(function() {
       console.log("FAIL");
@@ -59,10 +55,6 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeo
 
 weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $timeout, dbProcessingSrvc, viewLogicSrvc) {
   $scope.loading = true;
-  $timeout(function() {
-    console.log("VIEW CONTENT LOADED");
-    $scope.loading = false;
-  }, 500);
   $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
   $scope.isNotPrice = viewLogicSrvc.isNotPrice;
   $scope.getPercentile = viewLogicSrvc.getPercentile;
@@ -75,7 +67,6 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $tim
   // Get prices by (dest ,itinerary, checkdate), dests, dates, prices by dest, and medians by destination.
   $http.get("threedaypricesdb")
     .success(function(data){
-      var timestamp = Date.now();
       $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
       $scope.dests = dbProcessingSrvc.get_dests($scope.prices);
       $scope.dates = dbProcessingSrvc.get_checkdates($scope.prices);
@@ -91,8 +82,6 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $tim
       console.log($scope.prices_by_dest);
       console.log("Medians by dest (medians): ");
       console.log($scope.medians);
-      console.log('JS time: ');
-      console.log(Date.now() - timestamp);
     })
     .error(function() {
       console.log("FAIL");
@@ -101,12 +90,15 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $tim
   // Get latest flight details by destination, itinerary.
   $http.get("threedayflightdetailsdb")
     .success(function(data){
-      var timestamp = Date.now();
       $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(data);
       console.log("Latest flight details by dest, itinerary (latest_details): ");
       console.log($scope.latest_details);
-      console.log('JS time: ');
-      console.log(Date.now() - timestamp);
+      var timestamp = Date.now();
+      $timeout(function() {
+        $scope.loading = false;
+        console.log('LOADER JS time: ');
+        console.log(Date.now() - timestamp);
+      }, 500);
     })
     .error(function() {
       console.log("FAIL");
