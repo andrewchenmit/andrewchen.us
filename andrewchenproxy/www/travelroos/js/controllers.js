@@ -4,17 +4,28 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeo
   $scope.loading = true;
   $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
   $scope.isNotPrice = viewLogicSrvc.isNotPrice;
-  $scope.getPercentile = viewLogicSrvc.getPercentile;
+  $scope.getPercentile = dbProcessingSrvc.get_percentile;
   $scope.getPanelClass = viewLogicSrvc.getPanelClass;
   $scope.getMedianText = viewLogicSrvc.getMedianText;
   $scope.getMedianDiff = viewLogicSrvc.getMedianDiff;
   $scope.getMedianStatus = viewLogicSrvc.getMedianStatus;
   $scope.getPercentileStatus = viewLogicSrvc.getPercentileStatus;
+  $scope.updateOnlyDeals = function(showOnlyDeals) {
+    if (showOnlyDeals) {
+      $scope.price_rows = $scope.deals;
+    }
+    else {
+      $scope.price_rows = $scope.latest_details;
+    }
+  }
 
   // Get prices by (dest ,itinerary, checkdate), dests, dates, prices by dest, and medians by destination.
+  // Get latest flight details by destination, itinerary.
   $http.get("pricesdb")
     .success(function(data){
-      $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
+      pricesdb = data[0]
+      flightdetailsdb = data[1]
+      $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(pricesdb);
       $scope.dests = dbProcessingSrvc.get_dests($scope.prices);
       $scope.dates = dbProcessingSrvc.get_checkdates($scope.prices);
       $scope.prices_by_dest = dbProcessingSrvc.get_prices_by_dest($scope.prices);
@@ -29,17 +40,14 @@ weekendfaresControllers.controller('TwoDayCtrl', function ($scope, $http, $timeo
       console.log($scope.prices_by_dest);
       console.log("Medians by dest (medians): ");
       console.log($scope.medians);
-    })
-    .error(function() {
-      console.log("FAIL");
-    }
-  );
-  // Get latest flight details by destination, itinerary.
-  $http.get("flightdetailsdb")
-    .success(function(data){
-      $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(data);
+
+      $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(flightdetailsdb);
+      $scope.price_rows = $scope.latest_details;
+      $scope.deals = dbProcessingSrvc.get_deals($scope.latest_details, $scope.prices_by_dest);
       console.log("Latest flight details by dest, itinerary (latest_details): ");
       console.log($scope.latest_details);
+      console.log("Good deals (deals): ");
+      console.log($scope.deals);
       var timestamp = Date.now();
       $timeout(function() {
         $scope.loading = false;
@@ -57,17 +65,28 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $tim
   $scope.loading = true;
   $scope.getCheckdateClass = viewLogicSrvc.getCheckdateClass;
   $scope.isNotPrice = viewLogicSrvc.isNotPrice;
-  $scope.getPercentile = viewLogicSrvc.getPercentile;
+  $scope.getPercentile = dbProcessingSrvc.get_percentile;
   $scope.getPanelClass = viewLogicSrvc.getPanelClass;
   $scope.getMedianText = viewLogicSrvc.getMedianText;
   $scope.getMedianDiff = viewLogicSrvc.getMedianDiff;
   $scope.getMedianStatus = viewLogicSrvc.getMedianStatus;
   $scope.getPercentileStatus = viewLogicSrvc.getPercentileStatus;
+  $scope.updateOnlyDeals = function(showOnlyDeals) {
+    if (showOnlyDeals) {
+      $scope.price_rows = $scope.deals;
+    }
+    else {
+      $scope.price_rows = $scope.latest_details;
+    }
+  }
 
   // Get prices by (dest ,itinerary, checkdate), dests, dates, prices by dest, and medians by destination.
+  // Get latest flight details by destination, itinerary.
   $http.get("threedaypricesdb")
     .success(function(data){
-      $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(data);
+      pricesdb = data[0]
+      flightdetailsdb = data[1]
+      $scope.prices = dbProcessingSrvc.get_prices_by_dest_itinerary_checkdate(pricesdb);
       $scope.dests = dbProcessingSrvc.get_dests($scope.prices);
       $scope.dates = dbProcessingSrvc.get_checkdates($scope.prices);
       $scope.prices_by_dest = dbProcessingSrvc.get_prices_by_dest($scope.prices);
@@ -82,17 +101,14 @@ weekendfaresControllers.controller('ThreeDayCtrl', function ($scope, $http, $tim
       console.log($scope.prices_by_dest);
       console.log("Medians by dest (medians): ");
       console.log($scope.medians);
-    })
-    .error(function() {
-      console.log("FAIL");
-    }
-  );
-  // Get latest flight details by destination, itinerary.
-  $http.get("threedayflightdetailsdb")
-    .success(function(data){
-      $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(data);
+
+      $scope.latest_details = dbProcessingSrvc.get_details_by_dest_itinerary(flightdetailsdb);
+      $scope.price_rows = $scope.latest_details;
+      $scope.deals = dbProcessingSrvc.get_deals($scope.latest_details, $scope.prices_by_dest);
       console.log("Latest flight details by dest, itinerary (latest_details): ");
       console.log($scope.latest_details);
+      console.log("Good deals (deals): ");
+      console.log($scope.deals);
       var timestamp = Date.now();
       $timeout(function() {
         $scope.loading = false;

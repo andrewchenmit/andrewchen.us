@@ -59,3 +59,12 @@
 .loader {
   margin-left: 15px;
 }
+input[type=checkbox] {
+  vertical-align: top;
+}
+label {
+  font-weight: normal;
+}
+#deal_row {
+  padding-top: 10px;
+}

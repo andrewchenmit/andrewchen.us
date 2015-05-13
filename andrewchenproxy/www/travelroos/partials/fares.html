@@ -1,9 +1,19 @@
+  <div class="well row" ng-show="!loading">
+    <div>
+      <span style="width: 100px;">Filter by destination airport code:</span>
+      <input style="width: 100%; max-width: 500px;" placeholder="Enter airport code..." ng-model="destSearch">
+    </div>
+    <div id="deal_row">
+      <input id="deal_filter" type="checkbox" ng-model="showOnlyDeals" ng-change="updateOnlyDeals(showOnlyDeals)" class="ng-valid ng-dirty ng-valid-parse ng-touched">
+      <label for="deal_filter">Show only good deals</label>
+    </div>
+  </div>
   <div class="row">
     <!-- Body content -->
     <div class="three-quarters loader" ng-show="loading">
       Loading...
     </div>
-    <div ng-repeat="dest in ::dests | filter:destSearch">
+    <div ng-repeat="dest in dests | filter:destSearch">
       <div class="col-lg-7">
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -11,7 +21,7 @@
           </div>
           <div class="panel-body">
             <div class="panel-group" id="accordion{{::dest|removeSpaces}}" role="tablist" aria-multiselectable="true">
-              <div ng-repeat="(weekend_id, weekend_data) in ::latest_details[dest]" class="panel {{::getPanelClass(getPercentile(weekend_data.price, dest, prices_by_dest), getMedianDiff(weekend_data.price, dest, medians))}}">
+              <div ng-repeat="(weekend_id, weekend_data) in price_rows[dest]" class="panel {{::getPanelClass(getPercentile(weekend_data.price, prices_by_dest[dest]), getMedianDiff(weekend_data.price, dest, medians))}}">
                 <!-- Accordion heading start -->
                 <div class="panel-heading" role="tab" id="heading{{::dest|removeSpaces}}{{::weekend_data.itinerary_text|removeSpaces}}">
                   <div class="panel-title">
@@ -77,12 +87,14 @@
                       <table class="table table-condensed">
                         <thead>
                           <tr>
-                            <th ng-repeat="date in ::dates track by $index" ng-class="::getCheckdateClass($index)">{{::date}}</th>
+                            <th ng-repeat="date in ::dates track by ::$index" ng-class="::getCheckdateClass($index)">{{::date}}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td ng-repeat="date in ::dates track by $index" ng-class="::getCheckdateClass($index)" >{{::prices[dest][weekend_id][date].price_text}}</td>
+                            <!-- I have no idea why this is causing > 1460 watches -->
+                            <td ng-repeat="date in ::dates track by ::$index" ng-class="::getCheckdateClass($index)" >{{::(prices[dest][weekend_id][date].price_text)}}</td>
+                            <!-- end of problem child -->
                           </tr>
                         </tbody>
                       </table>
@@ -90,7 +102,7 @@
                     <!-- Price history table end -->
                     <!-- Percentile info start -->
                     <div ng-show="::!isNotPrice(weekend_data.price)">
-                      <div><span ng-class="::getPercentileStatus(getPercentile(weekend_data.price, dest, prices_by_dest))">{{::getPercentile(weekend_data.price, dest, prices_by_dest)}}%</span> of all weekend prices from {{::dest}} are lower than {{::weekend_data.price_text}}.</div>
+                      <div><span ng-class="::getPercentileStatus(getPercentile(weekend_data.price, prices_by_dest[dest]))">{{::getPercentile(weekend_data.price, prices_by_dest[dest])}}%</span> of all weekend prices from {{::dest}} are lower than {{::weekend_data.price_text}}.</div>
                       <div>{{::weekend_data.price_text}} is <span ng-class="::getMedianStatus(getMedianDiff(weekend_data.price, dest, medians))">{{::getMedianText(getMedianDiff(weekend_data.price, dest, medians))}}</span> than the median (${{::medians[dest]}}) of all weekend prices from {{::dest}}.</div>
                     </div>
                     <br/>

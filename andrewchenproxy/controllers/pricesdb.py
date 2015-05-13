@@ -13,67 +13,74 @@ class pricesdb:
     if prices is not None:
       return utility.json_dump(prices)
 
-    # Define your production Cloud SQL instance information.
-    _INSTANCE_NAME = 'weekendairfare:fares'
+    today = datetime.date.today()
+    day = '{:02d}'.format(today.year) + '-' + '{:02d}'.format(today.month) + '-' + '{:02d}'.format(today.day)
 
-    env = os.getenv('SERVER_SOFTWARE')
-    if (env and env.startswith('Google App Engine/')):
-      # Connecting from App Engine
-      db = MySQLdb.connect(
-             unix_socket='/cloudsql/weekendairfare:fares',
-             user='root', passwd='roos', db='weekendfares')
-    else:
-      # Connecting from an external network.
-      # Make sure your network is whitelisted
-      db = MySQLdb.connect(
-             '173.194.80.20',
-             'root',
-             "roos",
-             "weekendfares")
-    #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
-    cursor=db.cursor()
 
-    #today = datetime.date.today()
-    #day = '{:02d}'.format(today.year) + '-' + '{:02d}'.format(today.month) + '-' + '{:02d}'.format(today.day)
+    sqls = ["""SELECT destination_airport, there_date, back_date, check_date, price FROM fares""", """SELECT * FROM fares where latest = 1 and there_date > '%s'""" % (day)]
 
-    select_sql="""SELECT destination_airport, there_date, back_date, check_date, price FROM fares"""
+    final_result = []
 
-    try:
-      cursor.execute(select_sql)
-    except MySQLdb.Error as e:
-      print "db select error"
-      print e
+    for sql in sqls:
+      # Define your production Cloud SQL instance information.
+      _INSTANCE_NAME = 'weekendairfare:fares'
 
-    rows = cursor.fetchall()
-    columns = [t[0] for t in cursor.description]
-    result = []
+      env = os.getenv('SERVER_SOFTWARE')
+      if (env and env.startswith('Google App Engine/')):
+        # Connecting from App Engine
+        db = MySQLdb.connect(
+               unix_socket='/cloudsql/weekendairfare:fares',
+               user='root', passwd='roos', db='weekendfares')
+      else:
+        # Connecting from an external network.
+        # Make sure your network is whitelisted
+        db = MySQLdb.connect(
+               '173.194.80.20',
+               'root',
+               "roos",
+               "weekendfares")
+      #db = MySQLdb.connect("173.194.80.20","root","roos","weekendfares")
+      cursor=db.cursor()
 
-    for row in rows:
-      newrow = []
-      for item in row:
-        #print item
-        try:
-          item = unicodedata.normalize('NFKD', item)
+
+      try:
+        cursor.execute(sql)
+      except MySQLdb.Error as e:
+        print "db select error"
+        print e
+
+      rows = cursor.fetchall()
+      columns = [t[0] for t in cursor.description]
+      result = []
+
+      for row in rows:
+        newrow = []
+        for item in row:
           #print item
-        except:
-          pass
-        try:
-          item = item.decode('utf-8','ignore')
+          try:
+            item = unicodedata.normalize('NFKD', item)
+            #print item
+          except:
+            pass
+          try:
+            item = item.decode('utf-8','ignore')
+            #print item
+          except:
+            pass
+          try:
+            item = unicodedata.normalize('NFKD', item)
+            #print item
+          except:
+            pass
           #print item
-        except:
-          pass
-        try:
-          item = unicodedata.normalize('NFKD', item)
-          #print item
-        except:
-          pass
-        #print item
-        newrow.append(item)
-      row = dict(zip(columns, newrow))
-      result.append(row)
+          newrow.append(item)
+        row = dict(zip(columns, newrow))
+        result.append(row)
 
-    result = eval(str(result))
+      result = eval(str(result))
+      final_result.append(result)
+      db.close()
 
-    memcache.add('pricesdb', result, 86400) # 24 hours.
+    memcache.add('pricesdb', final_result, 86400) # 24 hours.
 
-    return utility.json_dump(result)
+    return utility.json_dump(final_result)

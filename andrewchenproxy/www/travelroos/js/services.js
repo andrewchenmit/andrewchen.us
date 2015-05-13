@@ -125,6 +125,34 @@ weekendfaresServices.service('dbProcessingSrvc', function() {
     result.sort().reverse();
     return result;
   }
+  function getPercentile(price, prices) {
+    if (price == -1) { return 'n/a'; }
+
+    // Percentile = % of prices lower than given price.
+    var lower_count = 0;
+    for (var i=0;i<prices.length;i++) {
+      if (prices[i] < price) {
+        lower_count += 1;
+      }
+    };
+    var result = Math.round(lower_count / prices.length * 100);
+    return result;
+  }
+  this.get_percentile = getPercentile;
+  this.get_deals = function (latest_details, prices_by_dest) {
+    var result = {};
+    angular.forEach(latest_details, function(value0, dest) {
+      result[dest] = {};
+      var prices = prices_by_dest[dest];
+      angular.forEach(value0, function(weekend_data, weekend_id) {
+        if (getPercentile(weekend_data.price, prices) <= 10) {
+          weekend_data['good_deal'] = true;
+          result[dest][weekend_id] = weekend_data;
+        }
+      });
+    });
+    return result;
+  }
 });
 
 weekendfaresServices.service('viewLogicSrvc', function() {
@@ -137,19 +165,6 @@ weekendfaresServices.service('viewLogicSrvc', function() {
       return true;
     }
     return false;
-  }
-  this.getPercentile = function(price, dest, prices_by_dest) {
-    if (price == -1) { return 'n/a'; }
-    var prices = prices_by_dest[dest];
-    // Percentile = % of prices lower than given price.
-    var lower_count = 0;
-    for (var i=0;i<prices.length;i++) {
-      if (prices[i] < price) {
-        lower_count += 1;
-      }
-    };
-    var result = Math.round(lower_count / prices.length * 100);
-    return result;
   }
   this.getPanelClass = function(percentile, median) {
     if (percentile <= 1) {
@@ -192,7 +207,7 @@ weekendfaresServices.service('viewLogicSrvc', function() {
     }
   }
   this.getPercentileStatus = function(diff) {
-    if (diff < 10) {
+    if (diff <= 10) {
       return 'good';
     }
     else if (diff > 20) {
@@ -201,5 +216,7 @@ weekendfaresServices.service('viewLogicSrvc', function() {
     else {
       return 'neutral';
     }
+  }
+  this.updateOnlyDeals = function() {
   }
 });
