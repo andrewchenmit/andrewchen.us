@@ -81,6 +81,6 @@ class threedaypricesdb:
       final_result.append(result)
       db.close()
 
-    memcache.add('pricesdb', final_result, 86400) # 24 hours.
+    memcache.add('threedaypricesdb', final_result, 86400) # 24 hours.
 
     return utility.json_dump(final_result)
