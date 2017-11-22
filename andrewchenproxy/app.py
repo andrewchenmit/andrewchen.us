@@ -1,29 +1,22 @@
-# bootsmooth application entry
-import web
-import cgi
-from bootsmooth import router, render
+import os
+import urllib
 
-# Add Custom Routes to Controllers
-# import controllers
-router.addRoute('/flightdetailsdb', 'controllers.flightdetailsdb')
-router.addRoute('/pricesdb', 'controllers.pricesdb')
-router.addRoute('/threedayflightdetailsdb', 'controllers.threedayflightdetailsdb')
-router.addRoute('/threedaypricesdb', 'controllers.threedaypricesdb')
-router.addRoute('/clearmemcache', 'controllers.clearmemcache')
-router.addRoute('/test', 'controllers.test')
+import jinja2
+import webapp2
 
-# The BootController
-# This is the default controller, routed to handle all paths -> /(.*)
-class BootController:
-  def GET(self, path=""):
-    # Call render.path to render HTML Files in /www/default/html that match the path
-    if path == 'andrewjennywedding':
-      return render.page('/www/wedding/index.html')
-    if path == 'travelroos' or path == 'weekendfares':
-      return render.page('/www/travelroos/index.html')
-    return render.page('/www/index.html')
 
-# Run the application
-if __name__ == '__main__':
-  app = web.application(router.getRoutes(), globals())
-  app.cgirun()
+JINJA_ENVIRONMENT = jinja2.Environment(
+  loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+  extensions=['jinja2.ext.autoescape'],
+  autoescape=True)
+
+class MainPage(webapp2.RequestHandler):
+  def get(self):
+    template_values = {
+    }
+    template = JINJA_ENVIRONMENT.get_template('index.html')
+    self.response.write(template.render(template_values))
+
+app = webapp2.WSGIApplication([
+    ('/', MainPage),
+], debug=True)

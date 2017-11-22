@@ -1,24 +1,27 @@
-application: andrewchenproxy
-version: 4
+application: andrewproxy
 runtime: python27
 api_version: 1
-threadsafe: no
-
-builtins:
-- admin_redirect: on
-
-libraries:
-- name: django
-  version: "1.2"
-- name: MySQLdb
-  version: "latest"
+threadsafe: true
 
 handlers:
+- url: /assets
+  static_dir: assets
 
-- url: /www
-  static_dir: www
-  
+- url: /images
+  static_dir: images
+
+- url: /fonts
+  static_dir: fonts 
+
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+
 - url: /.*
-  script: app.py
+  script: app.app
 
-
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
